@@ -1,0 +1,39 @@
+#+title: SICP
+
+SICP 学習用リポジトリです.
+
+* text
+  日本語訳, 英語訳ともにオンラインで読める.
+  - [[http://d.hatena.ne.jp/minghai/20140402/p1][非公式 PDF 版 SICP の全訳を公開しました - minghai の日記]]
+  - [[http://mitpress.mit.edu/sicp/][Welcome to the SICP Web Site]]
+
+  自分の場合, 本は図書館で借りた.
+  訳は, 自分の印象ではややピアソンの公式日本語訳のほうがいい気がした.
+
+* 開発環境
+ 言語は Scheme.  Emacs での開発環境を構築.
+ - [[http://qiita.com/da1/items/02f7d2f157c7145d58f2][Scheme - SICP を読むためにやっておくと便利かもしれないこと - Qiita]]  
+ - [[http://d.hatena.ne.jp/tequilasunset/20110220/p4][SICP 読むための設定とか - Clipboard]]
+
+* Bookmarks
+** MIT courseware: Structure and Interpretation of Computer Programs
+    - [[http://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-001-structure-and-interpretation-of-computer-programs-spring-2005/index.htm][Structure and Interpretation of Computer Programs | Electrical Engineering and Computer Science | MIT OpenCourseWare]]
+    - [[http://groups.csail.mit.edu/mac/classes/6.001/abelson-sussman-lectures/][Structure and Interpretation of Computer Programs, Video Lectures]]
+    - youtube: https://www.youtube.com/playlist?list=PL8FE88AA54363BC46
+
+** UC Berkeley: CS 61AS Structure and Interpretation of Computer Programs
+  - https://edge.edx.org/courses/uc-berkeley/cs61as-1x/SICP/courseware/
+
+** Answer
+   - asnwer: http://community.schemewiki.org/?SICP-Solutions
+   - elisp:  https://github.com/bixuanzju/sicp-exercises-elisp
+
+** Useful
+    - [[http://devblog.me/sicp.html][SICP and Me]]
+    - [[http://kinokoru.jp/archives/794][『計算機プログラムの構造と解釈』 (SICP) を読み終えて | きのこる庭]]
+      + [[http://kinokoru.jp/archives/572][SICP 第 1 章に関するまとめ | きのこる庭]]
+      + [[http://kinokoru.jp/archives/628][SICP 第 2 章に関するまとめ | きのこる庭]]
+    - [[http://natu.txt-nifty.com/natsutan/2007/09/sicp_by_a6a2.html][「計算機プログラムの構造と解釈 (SICP) 」を読み終えて by なつたん: なつたん]]
+    - [[http://coder.lv9.org/rinks/sicp.html][SICP - 残業プログラマのためのスキルアップリンク集]]
+    - wiki: [[http://sicpreading.bitbucket.org/build/html/index.html][HELLO SICP WORLD - sicp-reading 0.0.1 documentation]]
+    - sicp を読む会 https://github.com/sicp-reading
