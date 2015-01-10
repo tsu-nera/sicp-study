@@ -84,15 +84,49 @@
 
 #+begin_src emacs-lisp
 (defun p () p)
+
 (defun test (x y)
   (if (= x 0) 0 y))
 
-(test 0 (p))
+(test 0 'p)
 #+end_src
 
-Ben は適用順評価を用いるインタプリタではどのような挙動を観
-察するだろうか? Ben は正規順評価を用いるインタプリタではど
-のような挙動を観察するだろうか? あなたの回答を説明せよ. (特殊
-形式の if はインタプリタが適用順評価でも正規順評価でも同じ挙
-動を行うと仮定せよ: 述語式が最初に評価され, 結果が consequent
-と alternative のどちらを評価するか決定する)
+Ben は適用順評価を用いるインタプリタではどのような挙動を観察するだろうか? 
+Ben は正規順評価を用いるインタプリタではどのような挙動を観察するだろうか? 
+
+あなたの回答を説明せよ. 
+
+(特殊形式の if はインタプリタが適用順評価でも正規順評価でも同じ
+挙動を行うと仮定せよ:
+述語式が最初に評価され, 
+結果が consequent と alternative のどちらを評価するか決定する)
+
+* 1.1.7 Example
+
+#+begin_src emacs-lisp
+(defun squr-iter (guess x)
+  (if (good-enough? guess x)
+      guess
+    (squr-iter (improve guess x)
+	       x)))
+
+(defun improve (guess x)
+  (average guess (/ x guess)))
+
+(defun average (x y)
+  (/ (+ x y) 2))
+
+(defun square (guess)
+  (expt guess 2))
+
+(defun good-enough? (guess x)
+  (< (abs (- (square guess) x)) 0.001))
+
+(defun my-sqrt (x)
+  (squr-iter 1.0 x))
+  
+(my-sqrt 9)
+#+end_src
+
+#+RESULTS:
+: 3.00009155413138
