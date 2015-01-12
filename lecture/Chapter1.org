@@ -1,0 +1,96 @@
+* Chapter 1::        Building Abstractions with Procedures
+** Structure and Interpretation
+  手続きによる抽象
+  - 複数の単純な考えを合成して 1 つにする.
+  - 2 つの考えを同時に見えるように 1 つのもので繋ぐ.
+    その実在においてそれらに付随しているほかの考えからそれらを分離する
+
+  言語は以下の仕掛けを有している.
+
+  |                      | procedures     | data      |
+  |----------------------+----------------+-----------|
+  | primitive element    | +, *, <, =     | 23, 1.738 |
+  |----------------------+----------------+-----------|
+  | means of combination | () combination |           |
+  |                      | if             |           |
+  |                      | cond           |           |
+  |----------------------+----------------+-----------|
+  | means of abstraction | defun          |           |
+  
+*** primitive expressions 基本式: 
+     - which represent the simplest entities the language is concerned with,
+     - 言語が関わるもっとも単純なものを表す.
+
+#+begin_src emacs-lisp
+1
+#+end_src
+
+*** means of combination 組み合わせ法: 
+     - by which compound elements are built from simpler ones.
+     - より単純なものから合成物をつくる
+
+#+begin_src emacs-lisp
+(* 1 1)
+#+end_src
+
+*** means of abstraction 抽象化法: 
+   - by which compound elements can be named and manipulated as units.
+   - 合成物に名をつけ, 単一のもとして扱う.
+
+#+begin_src emacs-lisp
+(defun square (x) (* x x))
+#+end_src
+
+   これは, 以下の糖衣構文となっている. 
+   Lisp インタプリタは実際には以下のように解釈している.
+
+#+begin_src emacs-lisp
+(defun square
+    (lambda (x) (* x x))
+
+(square (square (square 2)))
+#+end_src
+
+  lmabda は procedure を生成する. 
+
+  ポイントは,
+
+  *primitive な値と関数との間に区別がないこと*
+   
+  抽象化によって, primitive な値を自分で定義できる.
+
+*** Newton 法  
+
+#+begin_src emacs-lisp
+(defun squr-iter (guess x)
+  (if (good-enough? guess x)
+      guess
+    (squr-iter (improve guess x)
+	       x)))
+
+(defun improve (guess x)
+  (average guess (/ x guess)))
+
+(defun average (x y)
+  (/ (+ x y) 2))
+
+(defun square (guess)
+  (expt guess 2))
+
+(defun good-enough? (guess x)
+  (< (abs (- (square guess) x)) 0.001))
+
+(defun my-sqrt (x)
+  (squr-iter 1.0 x))
+  
+(my-sqrt 9)
+#+end_src
+
+#+RESULTS:
+: 3.00009155413138
+
+* Chapter 2::        Building Abstractions with Data
+* Chapter 3::        Modularity, Objects, and State
+* Chapter 4::        Metalinguistic Abstraction
+* Chapter 5::        Computing with Register Machines
+
