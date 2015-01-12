@@ -1,6 +1,5 @@
 * Chapter 1::        Building Abstractions with Procedures
-** Structure and Interpretation
-  手続きによる抽象
+** 1.1 手続きによる抽象
   - 複数の単純な考えを合成して 1 つにする.
   - 2 つの考えを同時に見えるように 1 つのもので繋ぐ.
     その実在においてそれらに付随しているほかの考えからそれらを分離する
@@ -60,7 +59,6 @@
   抽象化によって, primitive な値を自分で定義できる.
 
 *** Newton 法  
-
 #+begin_src emacs-lisp
 (defun squr-iter (guess x)
   (if (good-enough? guess x)
@@ -88,6 +86,53 @@
 
 #+RESULTS:
 : 3.00009155413138
+
+*** 1.1.8 ブラックボックス
+    means of abstraction は, ブラックボックス.
+    利用者は, それがどう実装されているかを知る必要はない.
+    つまり,
+
+    *手続きの抽象化 procedure abstruction* 
+
+    と言える.
+
+*** 1.1.9 内部定義とブロック構造
+    手続きの仮引数は局所的である.
+    関数の定義は局所的でない.
+
+    手続きをブラックボックスにするためには,
+    利用者に必要のない関数は隠蔽する必要がある.
+
+    定義の入れ子を *ブロック構造* という.
+    ブロック構造の中で定義された関数は局所的である.
+
+**** ブロック構造による newton 法の書き直し.
+     Emacs Lisp は, ダイナミックスコープを採用している.
+     これでは関数定義がブロックの外でも呼び出せてしまう..
+
+    ;;; -*- lexical-binding: t -*- をファイルの先頭に追記する
+
+ #+begin_src emacs-lisp
+;;; -*- coding: utf-8; lexical-binding: t -*-
+(defun my-sqrt (x)
+  (defun squr-iter (guess x)
+    (if (good-enough? guess x)
+	guess
+      (squr-iter (improve guess x)
+		 x)))
+  (defun improve (guess x)
+    (average guess (/ x guess)))
+  (defun average (x y)
+    (/ (+ x y) 2))
+  (defun square (guess)
+    (expt guess 2))
+  (defun good-enough? (guess x)
+    (< (abs (- (square guess) x)) 0.001))
+  (squr-iter 1.0 x))
+(my-sqrt 9)
+#+end_src
+
+** 1.2 手続きとその生成するプロセス
 
 * Chapter 2::        Building Abstractions with Data
 * Chapter 3::        Modularity, Objects, and State
