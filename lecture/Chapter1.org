@@ -132,7 +132,139 @@
 (my-sqrt 9)
 #+end_src
 
-** 1.2 手続きとその生成するプロセス
+** 1.2 手続きとその生成するプロセス 
+   Procedures and the Processes They Generate.
+
+   Lecture 1B | MIT 6.001 Structure and Interpretation, 1986:
+   -  http://youtu.be/dlbMuv-jix8
+
+*** Peano Arithmetic
+    Iterative な定義.
+
+ #+begin_src emacs-lisp
+;; normal-order evaluation
+;; linear iteration
+(defun plus (x y)	      
+  (if (= x 0)
+      y
+    (+ (1- x) (1+ y))))
+
+(plus 4 3)
+#+end_src
+
+   Recursive な定義.
+
+#+begin_src emacs-lisp
+;; applicative-order evaluation
+;; linier recursion
+(defun plus (x y)
+  (if (= x 0)
+      y
+    (1+ (+ (1- x) y))))
+(plus 4 5)
+#+end_src
+
+    exercise 1.9 とかぶる.
+
+* 1.2.2
+  - [[info:sicp.info#1-2-2]]
+
+  再帰による fibonacci.基本的だが, 冗長過ぎる.
+  
+#+begin_src emacs-lisp
+(defun fib (n)
+  (cond ((= n 0) 0)
+	((= n 1) 1)
+	(t (+ (fib (- n 1))
+	      (fib (- n 2))))))
+
+(fib 4)					; => 3
+(fib 5)					; => 5
+(fib 6)					; => 8
+(fib 7)					; => 13
+#+end_src
+
+  反復による fibonacci. 状態変数として a, b, count を導入している.
+  - [[info:sicp.info#1-2-2]]
+
+#+begin_src emacs-lisp
+(defun fib (n)
+  (fib-iter 1 0 n))
+
+(defun fib-iter (a b count)
+  (if (= count 0)
+      b
+    (fib-iter (+ a b) a (- count 1))))
+
+(fib 6)					; => 8
+(fib 7)					; => 13
+(fib 8)					; => 21
+#+end_src
+
+*** ex
+    - If a is exactly 0, we should count that as 1 way to make change.
+    - If a is less than 0, we should count that as 0 ways to make change.
+    - If n is 0, we should count that as 0 ways to make change.
+
+    We can easily translate this description into a recursive procedure:
+
+#+begin_src emacs-lisp
+(defun count-change (amount)
+  (cc amount 2))
+
+(defun cc (amount kinds-of-coins)
+  (cond ((= amount 0) 1)
+	((or (< amount 0) (= kinds-of-coins 0)) 0)
+	(t (+ (cc amount
+		  (- kinds-of-coins 1))
+	      (cc (- amount
+		     (first-denomination kinds-of-coins))
+		  kinds-of-coins)))))
+
+(defun first-denomination (kinds-of-coins)
+  (cond ((= kinds-of-coins 1) 1)
+	((= kinds-of-coins 2) 5)))
+
+(count-change 10)
+#+end_src
+
+#+begin_src emacs-lisp
+(cc 10 2)
+(+ (cc 10 1) (cc (- 10 (first-denomination 2)) 2))
+(+ (cc 10 1) (cc (- 10 5) 2))
+(+ (cc 10 1) (cc 5 2))
+(+ (+ (cc 10 0) (cc 9 1)) (cc 5 2))
+(+ (+ 0 (cc 9 1)) (cc 5 2))
+(+ 1 (cc 5 2))
+(+ 1 (+ (cc 5 1) (cc 1 2)))
+(+ 1 (+ 1 (cc 1 2)))
+(+ 1 (+ 1 (+ (cc 1 1) (cc -1 1))))
+(+ 1 (+ 1 (+ 1 0)))
+3
+#+end_src
+
+#+begin_src emacs-lisp
+(defun count-change (amount)
+  (cc amount 5))
+
+(defun cc (amount kinds-of-coins)
+  (cond ((= amount 0) 1)
+	((or (< amount 0) (= kinds-of-coins 0)) 0)
+	(t (+ (cc amount
+		  (- kinds-of-coins 1))
+	      (cc (- amount
+		     (first-denomination kinds-of-coins))
+		  kinds-of-coins)))))
+
+(defun first-denomination (kinds-of-coins)
+  (cond ((= kinds-of-coins 1) 1)
+	((= kinds-of-coins 2) 5)
+	((= kinds-of-coins 3) 10)
+	((= kinds-of-coins 4) 25)
+	((= kinds-of-coins 5) 50)))
+
+(count-change 100)			; => 292
+#+end_src
 
 * Chapter 2::        Building Abstractions with Data
 * Chapter 3::        Modularity, Objects, and State

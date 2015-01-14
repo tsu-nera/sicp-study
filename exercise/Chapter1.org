@@ -209,3 +209,93 @@ Ben は正規順評価を用いるインタプリタではどのような挙動�
 
 (my-cube 27)
 #+end_src
+
+* 1.9
+  lecture と同じなので, 省略.
+
+  Iterative な定義.
+
+ #+begin_src emacs-lisp
+;; normal-order evaluation
+;; linier iteration
+(defun plus (x y)
+  (if (= x 0)
+      y
+    (+ (1- x) (1+ y))))
+#+end_src
+
+   Recursive な定義.
+
+#+begin_src emacs-lisp
+;; applicative-order evaluation
+;; linier recursion
+(defun plus (x y)
+  (if (= x 0)
+      y
+    (1+ (+ (1- x) y))))
+(plus 4 5)
+#+end_src
+
+* 1.10
+  The following procedure computes a mathematical
+  function called Ackermann's function.
+
+#+begin_src emacs-lisp
+(defun A (x y)
+  (cond ((= y 0) 0)
+	((= x 0) (* 2 y))
+	((= y 1) 2)
+	(t (A (- x 1)
+		 (A x (- y 1))))))
+#+end_src
+
+What are the values of the following expressions?
+
+#+begin_src emacs-lisp
+(A 1 10)				; => 1024
+
+(A 2 4)					; => 65536
+
+(A 3 3)					; => 65536
+#+end_src
+
+Consider the following procedures, where `A' is the procedure
+
+#+begin_src emacs-lisp
+(defun k (n) (* 5 n n))
+;; 5n^2
+(k 2)					; => 20
+
+;; ------------------
+(defun f (n) (A 0 n))
+;; 2n
+(f 1)					; => 2
+(f 2)					; => 4
+(f 4)					; => 8
+
+;; ------------------
+(defun g (n) (A 1 n))
+;; 2^n
+(g 1)					; => 2
+(g 2)					; => 4
+(g 3)					; => 8
+(g 4)					; => 16
+
+;; ------------------
+;; 2^2^2^2^...(n times)
+(defun h (n) (A 2 n))
+(h 1)					; => 2
+(A 2 1)					; => 2
+
+(h 2)					; => 4
+(h 3)					; => 16
+(h 4)					; => 65536
+;; (h 5)				; => error.
+
+#+end_src
+
+Give concise mathematical definitions for the functions computed
+by the procedures `f', `g', and `h' for positive integer values of
+n.  For example, `(k n)' computes 5n^2.
+
+- http://community.schemewiki.org/?sicp-ex-1.10
