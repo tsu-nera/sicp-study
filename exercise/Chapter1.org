@@ -384,3 +384,38 @@ n.  For example, `(k n)' computes 5n^2.
   [illegiblesymbol] = (1 - [sqrt] (5))/2.  Use induction and the
   definition of the Fibonacci numbers (see section *Note 1-2-2::) to
   prove that _Fib_(n) = ([phi]^n - [illegiblesymbol]^n)/[sqrt] (5).
+
+  skip :)
+
+* Exercise 1.14,15 
+  skip :)
+
+* Exercise 1.16
+
+#+begin_src emacs-lisp
+(defun fast-expt (b n) 
+  (defun iter (a b n)
+    (if (= n 0)
+	a
+	(if (even n)
+	    (iter a (square b) (/ n 2))
+	    (iter (* a b) b (- n 1)))))
+  (iter 1 b n))
+
+(defun even (n) (= (% n 2) 0))
+(defun square (x) (* x x))
+
+(even 2)
+(even 3)
+
+(fast-expt 2 0)
+(fast-expt 2 1) 
+(fast-expt 2 2)
+(fast-expt 2 4) 
+(fast-expt 2 8) 
+(fast-expt 2 16)
+#+end_src
+
+* 
+  
+- [[http://community.schemewiki.org/?sicp-solutions][sicp-solutions]]
