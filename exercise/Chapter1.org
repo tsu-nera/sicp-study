@@ -416,6 +416,33 @@ n.  For example, `(k n)' computes 5n^2.
 (fast-expt 2 16)
 #+end_src
 
-* 
-  
+* Exercise 1.17
+
+#+begin_src emacs-lisp
+(defun * (a b)
+  (if (= b 0)
+      0
+      (+ a (* a (- b 1)))))
+
+(* 1 0)
+(* 1 1)
+(* 2 2)
+#+end_src
+
+#+begin_src emacs-lisp
+(defun * (a b)
+  (defun iter (a b x)
+    (if (= b 0)
+	x
+	(iter a (1- b) (+ a x))))
+  (iter a b 0))
+
+(* 1 0)
+(* 1 1)
+(* 2 2)
+(* 2 3)
+#+end_src
+
+* TODO  Exercise 1.18
+
 - [[http://community.schemewiki.org/?sicp-solutions][sicp-solutions]]
