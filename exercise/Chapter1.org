@@ -85,8 +85,8 @@
 #+begin_src emacs-lisp
 (defun p () p)
 
-(defun test (x y)
-  (if (= x 0) 0 y))
+(defun test (acc y)
+  (if (= acc 0) 0 y))
 
 (test 0 'p)
 #+end_src
@@ -111,26 +111,26 @@ Ben は正規順評価を用いるインタプリタではどのような挙動�
 (new-if (= 2 3) 0 5)
 (new-if (= 1 1) 0 5)
 
-(defun squr-iter (guess x)
-  (new-if (good-enough? guess x)
+(defun squr-iter (guess acc)
+  (new-if (good-enough? guess acc)
       guess
-    (squr-iter (improve guess x)
-	       x)))
+    (squr-iter (improve guess acc)
+	       acc)))
 
-(defun improve (guess x)
-  (average guess (/ x guess)))
+(defun improve (guess acc)
+  (average guess (/ acc guess)))
 
-(defun average (x y)
-  (/ (+ x y) 2))
+(defun average (acc y)
+  (/ (+ acc y) 2))
 
 (defun square (guess)
   (expt guess 2))
 
-(defun good-enough? (guess x)
-  (< (abs (- (square guess) x)) 0.001))
+(defun good-enough? (guess acc)
+  (< (abs (- (square guess) acc)) 0.001))
 
-(defun my-sqrt (x)
-  (squr-iter 1.0 x))
+(defun my-sqrt (acc)
+  (squr-iter 1.0 acc))
   
 (my-sqrt 9)
 #+end_src
@@ -147,17 +147,17 @@ Ben は正規順評価を用いるインタプリタではどのような挙動�
 -> 0.3125 のまま.
 
 #+begin_src emacs-lisp
-(defun squr-iter (guess pre-guess x)
+(defun squr-iter (guess pre-guess acc)
   (if (good-enough? guess pre-guess)
       guess
-    (squr-iter (improve guess x) guess
-	       x)))
+    (squr-iter (improve guess acc) guess
+	       acc)))
 
-(defun improve (guess x)
-  (average guess (/ x guess)))
+(defun improve (guess acc)
+  (average guess (/ acc guess)))
 
-(defun average (x y)
-  (/ (+ x y) 2))
+(defun average (acc y)
+  (/ (+ acc y) 2))
 
 (defun square (guess)
   (expt guess 2))
@@ -165,8 +165,8 @@ Ben は正規順評価を用いるインタプリタではどのような挙動�
 (defun good-enough? (guess pre-guess)
   (< (abs (- guess pre-guess)) 0.001))
 
-(defun my-sqrt (x)
-  (squr-iter 1.0 2.0 x))
+(defun my-sqrt (acc)
+  (squr-iter 1.0 2.0 acc))
 
 (my-sqrt 9)
 
@@ -176,7 +176,7 @@ Ben は正規順評価を用いるインタプリタではどのような挙動�
 
 * Exercise 1.8
   Newton's method for cube roots is based on the
-  fact that if y is an approximation to the cube root of x, then a
+  fact that if y is an approximation to the cube root of acc, then a
   better approximation is given by the value
   
   x/y^2 + 2y
@@ -189,23 +189,23 @@ Ben は正規順評価を用いるインタプリタではどのような挙動�
   these square-root and cube-root procedures.)
 
 #+begin_src emacs-lisp
-(defun cube-iter (guess x)
-  (if (good-enough? guess x)
+(defun cube-iter (guess acc)
+  (if (good-enough? guess acc)
       guess
-    (cube-iter (improve guess x)
-	       x)))
+    (cube-iter (improve guess acc)
+	       acc)))
 
-(defun improve (guess x)
-  (/ (+ (/ x (expt guess 2)) (* 2 guess)) 3))
+(defun improve (guess acc)
+  (/ (+ (/ acc (expt guess 2)) (* 2 guess)) 3))
 
-(defun good-enough? (guess x)
-  (< (abs (- (cube guess) x)) 0.001))
+(defun good-enough? (guess acc)
+  (< (abs (- (cube guess) acc)) 0.001))
 
 (defun cube (guess)
   (expt guess 3))
 
-(defun my-cube (x)
-    (cube-iter 1.0 x))
+(defun my-cube (acc)
+    (cube-iter 1.0 acc))
 
 (my-cube 27)
 #+end_src
@@ -218,10 +218,10 @@ Ben は正規順評価を用いるインタプリタではどのような挙動�
  #+begin_src emacs-lisp
 ;; normal-order evaluation
 ;; linier iteration
-(defun plus (x y)
-  (if (= x 0)
+(defun plus (acc y)
+  (if (= acc 0)
       y
-    (+ (1- x) (1+ y))))
+    (+ (1- acc) (1+ y))))
 #+end_src
 
    Recursive な定義.
@@ -229,10 +229,10 @@ Ben は正規順評価を用いるインタプリタではどのような挙動�
 #+begin_src emacs-lisp
 ;; applicative-order evaluation
 ;; linier recursion
-(defun plus (x y)
-  (if (= x 0)
+(defun plus (acc y)
+  (if (= acc 0)
       y
-    (1+ (+ (1- x) y))))
+    (1+ (+ (1- acc) y))))
 (plus 4 5)
 #+end_src
 
@@ -241,12 +241,12 @@ Ben は正規順評価を用いるインタプリタではどのような挙動�
   function called Ackermann's function.
 
 #+begin_src emacs-lisp
-(defun A (x y)
+(defun A (acc y)
   (cond ((= y 0) 0)
-	((= x 0) (* 2 y))
+	((= acc 0) (* 2 y))
 	((= y 1) 2)
-	(t (A (- x 1)
-		 (A x (- y 1))))))
+	(t (A (- acc 1)
+		 (A acc (- y 1))))))
 #+end_src
 
 What are the values of the following expressions?
@@ -403,7 +403,7 @@ n.  For example, `(k n)' computes 5n^2.
   (iter 1 b n))
 
 (defun even (n) (= (% n 2) 0))
-(defun square (x) (* x x))
+(defun square (acc) (* acc acc))
 
 (even 2)
 (even 3)
@@ -431,10 +431,10 @@ n.  For example, `(k n)' computes 5n^2.
 
 #+begin_src emacs-lisp
 (defun * (a b)
-  (defun iter (a b x)
+  (defun iter (a b acc)
     (if (= b 0)
-	x
-	(iter a (1- b) (+ a x))))
+	acc
+	(iter a (1- b) (+ a acc))))
   (iter a b 0))
 
 (* 1 0)
@@ -443,6 +443,24 @@ n.  For example, `(k n)' computes 5n^2.
 (* 2 3)
 #+end_src
 
-* TODO  Exercise 1.18
+* Exercise 1.18
+
+#+begin_src emacs-lisp
+(defun even (n) (= (% n 2) 0))
+(defun square (acc) (* acc acc))
+
+(defun * (a b)
+  (defun iter (acc a b)
+    (cond ((= b 0) acc)
+	  ((even b) (iter acc (square a) (/ b 2)))
+	  (t (iter (+ acc a) a (- b 1)))))
+  (iter a b 0))
+
+(* 2 4)
+(* 4 0)
+#+end_src
+
+* Exercise 1.19
+  pass...
 
 - [[http://community.schemewiki.org/?sicp-solutions][sicp-solutions]]
