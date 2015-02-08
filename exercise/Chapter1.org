@@ -462,5 +462,82 @@ n.  For example, `(k n)' computes 5n^2.
 
 * Exercise 1.19
   pass...
+* Exercise 1.21
+
+#+begin_src emacs-lisp
+(defun smallest-divisor (n)
+  (find-divisor n 2))
+
+(defun find-divisor (n test-divisor)
+  (cond ((> (square test-divisor) n) n)
+	((divides? test-divisor n) test-divisor)
+	(t (find-divisor n (+ test-divisor 1)))))
+
+(defun divides? (a b)
+  (= (% b a) 0))
+
+(defun square (x) (* x x))
+
+(defun prime? (n)
+  (= n (smallest-divisor n)))
+
+(prime? 199)				; => t
+(prime? 1999)				; => t
+(prime? 19999)				; => nil
+#+end_src
+
+* 1.22
+
+#+begin_src emacs-lisp
+(defun timed-prime-test (n)
+  (print "\n")
+  (print n)
+  (start-prime-test n current-time))
+
+(defun start-prime-test (n start-time)
+  (if (prime? n)
+      (report-prime (- current-time start-time))))
+
+(defun report-prime (elapsed-time)
+  (print " *** ")
+  (print elapsed-time))
+
+(timed-prime-test 199)		       
+
+#+end_src
 
 - [[http://community.schemewiki.org/?sicp-solutions][sicp-solutions]]
+
+* 1.23
+  2 の倍数はスキップするように改良.
+
+#+begin_src emacs-lisp
+(defun smallest-divisor (n)
+  (find-divisor n 2))
+
+(defun find-divisor (n test-divisor)
+  (cond ((> (square test-divisor) n) n)
+	((divides? test-divisor n) test-divisor)
+	(t (find-divisor n (next test-divisor)))))
+
+(defun divides? (a b)
+  (= (% b a) 0))
+
+(defun square (x) (* x x))
+
+(defun next (n)
+  (cond ((= n 2) 3)
+	(t
+	 (+ n 2))))
+
+(defun prime? (n)
+  (= n (smallest-divisor n)))
+
+(next 2)
+(next 3)
+(next 5)
+
+(prime? 199)				; => t
+(prime? 1999)				; => t
+(prime? 19999)				; => nil
+#+end_src

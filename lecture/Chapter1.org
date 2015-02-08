@@ -266,6 +266,44 @@
 (count-change 100)			; => 292
  #+end_src
 
+Fermart のテスト
+
+#+begin_src emacs-lisp
+(defun expmod (base exp m)
+  (cond ((= exp 0) 1)
+	((even? exp)
+	 (% (square (expmod base (/ exp 2) m))
+	    m))
+  (t
+   (% (* base (expmod base (- exp 1) m))
+      m))))
+
+#+end_src
+
+*** 1.2.6
+
+#+begin_src emacs-lisp
+(defun smallest-divisor (n)
+  (find-divisor n 2))
+
+(defun find-divisor (n test-divisor)
+  (cond ((> (square test-divisor) n) n)
+	((divides? test-divisor n) test-divisor)
+	(t (find-divisor n (+ test-divisor 1)))))
+
+(defun divides? (a b)
+  (= (% b a) 0))
+
+(defun square (x) (* x x))
+
+(defun prime? (n)
+  (= n (smallest-divisor n)))
+
+(prime? 199)				; => t
+(prime? 1999)				; => t
+(prime? 19999)				; => nil
+#+end_src
+
 ** 1.3 高階手続きによる抽象
    https://www.youtube.com/watch?v=erHp3r6PbJk&list=PL8FE88AA54363BC46&index=3
 
