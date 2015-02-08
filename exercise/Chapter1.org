@@ -1,5 +1,8 @@
 #+title: 第 1 章 手続きによる抽象
 
+- [[http://community.schemewiki.org/?sicp-solutions][sicp-solutions]]
+- https://github.com/bixuanzju/sicp-exercises-elisp
+
 * Exercise 1.1
   Below is a sequence of expressions.  What is the
   result printed by the interpreter in response to each expression?
@@ -492,21 +495,25 @@ n.  For example, `(k n)' computes 5n^2.
 (defun timed-prime-test (n)
   (print "\n")
   (print n)
-  (start-prime-test n current-time))
+  (start-prime-test n (get-runtime)))
 
 (defun start-prime-test (n start-time)
   (if (prime? n)
-      (report-prime (- current-time start-time))))
+      (report-prime (- (get-runtime) start-time))))
 
 (defun report-prime (elapsed-time)
   (print " *** ")
   (print elapsed-time))
 
-(timed-prime-test 199)		       
+(defun get-runtime ()
+  (+ (* (nth 1 (get-internal-run-time)) 1000)
+     (nth 2 (get-internal-run-time))))
 
+(timed-prime-test 199)			; => 0
+
+;; elisp では, スタックオーバーフローが発生してしまう.
+;; (timed-prime-test 1000000007)
 #+end_src
-
-- [[http://community.schemewiki.org/?sicp-solutions][sicp-solutions]]
 
 * 1.23
   2 の倍数はスキップするように改良.
@@ -539,5 +546,9 @@ n.  For example, `(k n)' computes 5n^2.
 
 (prime? 199)				; => t
 (prime? 1999)				; => t
-(prime? 19999)				; => nil
 #+end_src
+
+* 1.24
+  elisp ではできないのでバス.
+
+* 1.25
