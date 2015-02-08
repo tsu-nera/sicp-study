@@ -690,3 +690,52 @@ n.  For example, `(k n)' computes 5n^2.
 (factorial 5)				; => 120
 #+end_src
 
+* 1.33
+
+#+begin_src emacs-lisp
+(defun filtered-accumulate (filter combiner null-value term a next b)
+  (if (> a b) null-value
+      (funcall combiner
+	       (if (funcall filter a)
+		   (funcall term a)
+		   null-value)
+	       (filtered-accumulate
+		filter combiner null-value term (funcall next a) next b))))
+
+(defun add (x y) (+ x y))
+(defun square (x) (* x x))
+(defun pow (x y) (* x y))
+(defun even? (x) (= (% x 2) 0))
+(defun identity (x) x)
+
+(defun smallest-div (n)
+  (defun divides? (a b) (= 0 (% b a)))
+  (defun find-div (n test) 
+    (cond ((> (square test) n) n) ((divides? test n) test) 
+	  (t (find-div n (+ test 1))))) 
+  (find-div n 2))
+
+(defun prime? (n) 
+  (if (= n 1) nil (= n (smallest-div n))))
+
+(defun sum-of-prime-squares (a b)
+  (filtered-accumulate 'prime? 'add 0 'square a '1+ b))
+
+(sum-of-prime-squares 1 5) 		; => 38
+(sum-of-prime-squares 1 10)		; => 87
+
+(defun gcd (m n) 
+  (cond ((< m n) (gcd n m)) 
+	((= n 0) m) 
+	(t (gcd n (% m n)))))
+
+(defun relative-prime? (m n) 
+  (= (gcd m n) 1))
+
+(defun product-of-relative-primes (n) 
+  (defun filter (x) 
+    (relative-prime? x n)) 
+  (filtered-accumulate 'filter 'pow 1 'identity 1 '1+ n))
+
+(product-of-relative-primes 10)		; => 189
+#+end_src
