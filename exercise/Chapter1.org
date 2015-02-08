@@ -642,4 +642,51 @@ n.  For example, `(k n)' computes 5n^2.
 (* (product 'pi-term 1 '1+ 100) 4)	; => 3.1570301764551654
    #+end_src
 
-   
+* 1.32   
+
+#+begin_src emacs-lisp
+;; (defun sum (term a next b)
+;;   (if (> a b) 0
+;;       (+ (funcall term a)
+;; 	 (sum term (funcall next a) next b))))
+
+;; (defun product (term a next b)
+;;   (if (> a b) 1
+;;       (* (funcall term a)
+;; 	 (product term (funcall next a) next b))))
+
+(defun identity (x) x)
+
+;; recursive
+(defun accumulate (combiner null-value term a next b)
+  (if (> a b) null-value
+      (funcall combiner
+	       (funcall term a)
+	       (accumulate combiner null-value term (funcall next a) next b))))
+
+;; iterative
+;; (defun accumulate (combiner null-value term a next b) 
+;;   (defun iter (a res) 
+;;     (if (> a b) res 
+;; 	(iter (funcall next a)
+;; 	      (funcall combiner res (funcall term a)))))
+;;   (iter a null-value))
+
+(defun add (x y) (+ x y))
+(defun pow (x y) (* x y))
+
+(defun sum (term a next b)
+  (accumulate 'add 0 term a next b))
+
+(defun product (term a next b)
+  (accumulate 'pow 1 term a next b))
+
+(defun sum-integers (x)
+  (sum 'identity 0 '1+ x))
+(defun factorial (x)
+  (product 'identity 1 '1+ x))
+
+(sum-integers 5)			; => 15
+(factorial 5)				; => 120
+#+end_src
+
