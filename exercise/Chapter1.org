@@ -565,8 +565,8 @@ n.  For example, `(k n)' computes 5n^2.
       (+ (funcall term a)
 	 (sum term (funcall next a) next b))))
 
-(defun simpson (f aa b n)
-  (let* ((h (/ (- b aa) (float n)))
+(defun simpson (f aa bb n)
+  (let* ((h (/ (- bb aa) (float n)))
 	 (yk (lambda (k) (funcall f (+ aa (* h k)))))
          (simpson-term (lambda (k)
 			 (* (cond ((or (= k 0) (= k n)) 1)
@@ -577,4 +577,27 @@ n.  For example, `(k n)' computes 5n^2.
 
 (simpson 'cube 0 1 2)			; => 0.25
 (simpson 'cube 0 1 100)			; => 0.24999999999999992
+;;(simpson 'cube 0 1 1000)		; => 
 #+end_src
+
+* 1.30
+  反復的プロセスへの書き換え.
+
+#+begin_src emacs-lisp
+(defun inc (n) (+ n 1))
+(defun cube (x) (* x x x))
+
+(defun sum-cubes (a b)
+  (sum 'cube a 'inc b))
+
+(defun sum (f sum-a next sum-b)
+  (defun iter (iter-a result)
+    (if (> iter-a sum-b)
+	result
+	(iter (funcall next iter-a) (+ result (funcall f iter-a)))))
+  (iter sum-a 0))
+
+(sum-cubes 1 10)			; => 3025
+#+end_src
+
+* 1.31
