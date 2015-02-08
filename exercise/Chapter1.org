@@ -3,54 +3,54 @@
 - [[http://community.schemewiki.org/?sicp-solutions][sicp-solutions]]
 - https://github.com/bixuanzju/sicp-exercises-elisp
 
-* Exercise 1.1
+* 1.1
   Below is a sequence of expressions.  What is the
   result printed by the interpreter in response to each expression?
   Assume that the sequence is to be evaluated in the order in which
   it is presented.
 
 #+begin_src emacs-lisp
-10					; => 10
+10					; => 
 
-(+ 5 3 4)				; => 12
+(+ 5 3 4)				; => 
 
-(- 9 1)					; => 8
+(- 9 1)					; => 
 
-(/ 6 2) 				; => 3
+(/ 6 2) 				; => 
 
-(+ (* 2 4) (- 4 6))			; => 6
+(+ (* 2 4) (- 4 6))			; => 
 
-(setq a 3)				; => 3
+(setq a 3)				; => 
 
-(setq b (+ a 1))			; => 4
+(setq b (+ a 1))			; => 
 
-(+ a b (* a b))				; => 19
+(+ a b (* a b))				; => 
 
-(= a b)					; => nil
+(= a b)					; => 
 
 (if (and (> b a) (< b (* a b)))
     b
-  a)					; => 4
+  a)					; => 
 
 (cond ((= a 4) 6)
       ((= b 4) (+ 6 7 a))
-      (t 25))				; => 16
+      (t 25))				; => 
 
-(+ 2 (if (> b a) b a))			; => 6
+(+ 2 (if (> b a) b a))			; => 
 
 (* (cond ((> a b) a)
 	 ((< a b) b)
 	 (t -1))
-   (+ a 1))				; =>16
+   (+ a 1))				; => 
 #+end_src
 
-* Exercise 1.2
+* 1.2
 
 #+begin_src emacs-lisp
 (/ (+ 5 4 (- 2 (- 3 (+ 6 (/ 4.0 5))))) (* 3 (- 6 2) (- 2 7)))
 #+end_src
 
-* Exercise 1.3
+* 1.3
   3 つの数値を引数として取り, 内 2 つの大きな数値
   の二乗の和を返す手続を定義せよ.
 
@@ -64,7 +64,7 @@
 	 (+ (* a a) (* b b)))))
 #+end_src
 
-* Exercise 1.4:
+* 1.4:
   我々の評価モデルがオペレータが複合式である組み
   合わせを可能にすることを観察せよ. この観察結果を用いて次の
   手続の挙動を説明せよ:
@@ -79,7 +79,7 @@
 (a-plus-abs-b 1 -1)
 #+end_src
 
-* Exercise 1.5:
+* 1.5:
   Ben Bitdiddle は自分が直面するインタプリタが適用順評価と
   正規順評価のどちらを用いるか決定するテストを開発した.
 
@@ -104,7 +104,7 @@ Ben は正規順評価を用いるインタプリタではどのような挙動�
 述語式が最初に評価され, 
 結果が consequent と alternative のどちらを評価するか決定する)
 
-* Exercise 1.6
+* 1.6
 
 #+begin_src emacs-lisp
 (defun new-if (predicate then-clause else-clause)
@@ -141,7 +141,7 @@ Ben は正規順評価を用いるインタプリタではどのような挙動�
 -> max-lisp-eval-depth
   http://community.schemewiki.org/?sicp-ex-1.6
 
-* Exercise 1.7
+* 1.7
 
 (my-sqrt 900000000000000000000000000000)
 -> max-lisp-eval-depth
@@ -177,7 +177,7 @@ Ben は正規順評価を用いるインタプリタではどのような挙動�
 
 - http://community.schemewiki.org/?sicp-ex-1.7
 
-* Exercise 1.8
+* 1.8
   Newton's method for cube roots is based on the
   fact that if y is an approximation to the cube root of acc, then a
   better approximation is given by the value
@@ -255,11 +255,11 @@ Ben は正規順評価を用いるインタプリタではどのような挙動�
 What are the values of the following expressions?
 
 #+begin_src emacs-lisp
-(A 1 10)				; => 1024
+(A 1 10)				; => 
 
-(A 2 4)					; => 65536
+(A 2 4)					; => 
 
-(A 3 3)					; => 65536
+(A 3 3)					; => 
 #+end_src
 
 Consider the following procedures, where `A' is the procedure
@@ -267,32 +267,32 @@ Consider the following procedures, where `A' is the procedure
 #+begin_src emacs-lisp
 (defun k (n) (* 5 n n))
 ;; 5n^2
-(k 2)					; => 20
+(k 2)					; => 
 
 ;; ------------------
 (defun f (n) (A 0 n))
 ;; 2n
-(f 1)					; => 2
-(f 2)					; => 4
-(f 4)					; => 8
+(f 1)					; => 
+(f 2)					; => 
+(f 4)					; => 
 
 ;; ------------------
 (defun g (n) (A 1 n))
 ;; 2^n
-(g 1)					; => 2
-(g 2)					; => 4
-(g 3)					; => 8
-(g 4)					; => 16
+(g 1)					; => 
+(g 2)					; => 
+(g 3)					; => 
+(g 4)					; => 
 
 ;; ------------------
 ;; 2^2^2^2^...(n times)
 (defun h (n) (A 2 n))
-(h 1)					; => 2
-(A 2 1)					; => 2
+(h 1)					; => 
+(A 2 1)					; => 
 
-(h 2)					; => 4
-(h 3)					; => 16
-(h 4)					; => 65536
+(h 2)					; => 
+(h 3)					; => 
+(h 4)					; => 
 ;; (h 5)				; => error.
 
 #+end_src
@@ -302,7 +302,6 @@ by the procedures `f', `g', and `h' for positive integer values of
 n.  For example, `(k n)' computes 5n^2.
 
 - http://community.schemewiki.org/?sicp-ex-1.10
-
 
 * 1.11:
   A function f is defined by the rule that
@@ -322,9 +321,9 @@ n.  For example, `(k n)' computes 5n^2.
 	 (* 2 (f (- n 2)))
 	 (* 3 (f (- n 3))))))
 
-(f 2)				; => 2
-(f 3)				; => 4
-(f 5)				; => 25
+(f 2)				; => 
+(f 3)				; => 
+(f 5)				; => 
 #+end_src
 
 ** iterative
@@ -348,7 +347,7 @@ n.  For example, `(k n)' computes 5n^2.
 (f 5)
 #+end_src
 
-* Exercise 1.12:* 
+* 1.12
   The following pattern of numbers is called "Pascal's triangle".
 
 #+begin_src text
@@ -374,14 +373,14 @@ n.  For example, `(k n)' computes 5n^2.
 	 (+ (pascal (1- row) col) (pascal row (1- col))))))
   
 (pascal 1 1)
-(pascal 2 1)				; => 1
-(pascal 1 2)				; => 1
-(pascal 2 2)				; => 2
-(pascal 2 3)				; => 3
-(pascal 3 3)				; => 6
+(pascal 2 1)				; => 
+(pascal 1 2)				; => 
+(pascal 2 2)				; => 
+(pascal 2 3)				; => 
+(pascal 3 3)				; => 
 #+end_src
 
-* Exercise 1.13:* 
+* 1.13
   Prove that _Fib_(n) is the closest integer to
   [phi]^n/[sqrt] (5), where [phi] = (1 + [sqrt] (5))/2.  Hint: Let
   [illegiblesymbol] = (1 - [sqrt] (5))/2.  Use induction and the
@@ -389,11 +388,11 @@ n.  For example, `(k n)' computes 5n^2.
   prove that _Fib_(n) = ([phi]^n - [illegiblesymbol]^n)/[sqrt] (5).
 
   skip :)
-
-* Exercise 1.14,15 
+  
+* 1.14,15 
   skip :)
 
-* Exercise 1.16
+* 1.16
 
 #+begin_src emacs-lisp
 (defun fast-expt (b n) 
@@ -419,7 +418,7 @@ n.  For example, `(k n)' computes 5n^2.
 (fast-expt 2 16)
 #+end_src
 
-* Exercise 1.17
+* 1.17
 
 #+begin_src emacs-lisp
 (defun * (a b)
@@ -446,7 +445,7 @@ n.  For example, `(k n)' computes 5n^2.
 (* 2 3)
 #+end_src
 
-* Exercise 1.18
+* 1.18
 
 #+begin_src emacs-lisp
 (defun even (n) (= (% n 2) 0))
@@ -463,9 +462,9 @@ n.  For example, `(k n)' computes 5n^2.
 (* 4 0)
 #+end_src
 
-* Exercise 1.19
+* 1.19
   pass...
-* Exercise 1.21
+* 1.21
 
 #+begin_src emacs-lisp
 (defun smallest-divisor (n)
@@ -484,9 +483,9 @@ n.  For example, `(k n)' computes 5n^2.
 (defun prime? (n)
   (= n (smallest-divisor n)))
 
-(prime? 199)				; => t
-(prime? 1999)				; => t
-(prime? 19999)				; => nil
+(prime? 199)				; => 
+(prime? 1999)				; => 
+(prime? 19999)				; => 
 #+end_src
 
 * 1.22
@@ -509,7 +508,7 @@ n.  For example, `(k n)' computes 5n^2.
   (+ (* (nth 1 (get-internal-run-time)) 1000)
      (nth 2 (get-internal-run-time))))
 
-(timed-prime-test 199)			; => 0
+(timed-prime-test 199)			; => 
 
 ;; elisp では, スタックオーバーフローが発生してしまう.
 ;; (timed-prime-test 1000000007)
@@ -544,12 +543,38 @@ n.  For example, `(k n)' computes 5n^2.
 (next 3)
 (next 5)
 
-(prime? 199)				; => t
-(prime? 1999)				; => t
+(prime? 199)				; => 
+(prime? 1999)				; => 
 #+end_src
 
 * 1.24
   elisp ではできないのでバス.
 
 * 1.25-28
-  pass
+  skip :)
+
+* 1.29
+
+#+begin_src emacs-lisp
+(defun even? (a) (= (% a 2) 0))
+(defun inc (n) (+ n 1))
+(defun cube (n) (* n n n))
+
+(defun sum (term a next b)
+  (if (> a b) 0
+      (+ (funcall term a)
+	 (sum term (funcall next a) next b))))
+
+(defun simpson (f aa b n)
+  (let* ((h (/ (- b aa) (float n)))
+	 (yk (lambda (k) (funcall f (+ aa (* h k)))))
+         (simpson-term (lambda (k)
+			 (* (cond ((or (= k 0) (= k n)) 1)
+				  ((even? k) 2)
+				  (t 4))
+			    (funcall yk k)))))
+    (* (/ h 3) (sum simpson-term aa 'inc n))))
+
+(simpson 'cube 0 1 2)			; => 0.25
+(simpson 'cube 0 1 100)			; => 0.24999999999999992
+#+end_src
