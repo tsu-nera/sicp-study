@@ -264,9 +264,9 @@
 	((= kinds-of-coins 5) 50)))
 
 (count-change 100)			; => 292
- #+end_src
+#+end_src
 
-Fermart のテスト
+ Fermart のテスト
 
 #+begin_src emacs-lisp
 (defun expmod (base exp m)
@@ -274,10 +274,9 @@ Fermart のテスト
 	((even? exp)
 	 (% (square (expmod base (/ exp 2) m))
 	    m))
-  (t
-   (% (* base (expmod base (- exp 1) m))
-      m))))
-
+	(t
+	 (% (* base (expmod base (- exp 1) m))
+	    m))))
 #+end_src
 
 *** 1.2.6
