@@ -601,3 +601,45 @@ n.  For example, `(k n)' computes 5n^2.
 #+end_src
 
 * 1.31
+  product への応用
+
+   #+begin_src emacs-lisp
+;; a
+(defun product (product-term product-a product-next product-b)
+  (if (> product-a product-b) 1
+      (* (funcall product-term product-a)
+	 (product product-term
+		  (funcall product-next product-a)
+		  product-next product-b))))
+
+;; b
+;; (defun product (product-term product-a product-next product-b)
+;;   (defun product-iter (iter-a acc)
+;;     (if (> iter-a product-b) acc
+;; 	(product-iter
+;; 	 (funcall product-next iter-a)
+;; 	 (* (funcall product-term iter-a) acc))))
+;;   (product-iter product-a 1))
+
+(defun identity (x) x)
+
+(defun factorial (x)
+  (product 'identity 1 '1+ x))
+
+(factorial 1)				; => 1
+(factorial 2)				; => 2
+(factorial 4)				; => 24
+(factorial 5)				; => 120
+(factorial 10)				; => 3628800
+
+(defun even? (a) (= (% a 2) 0))
+(defun pi-term (n) 
+  (if (even? n) 
+      (/ (float (+ n 2)) (+ n 1)) 
+      (/ (float (+ n 1)) (+ n 2))))
+
+(* (product 'pi-term 1 '1+ 6) 4)	; => 3.343673469387755
+(* (product 'pi-term 1 '1+ 100) 4)	; => 3.1570301764551654
+   #+end_src
+
+   
