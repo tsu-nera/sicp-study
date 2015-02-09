@@ -739,3 +739,13 @@ n.  For example, `(k n)' computes 5n^2.
 
 (product-of-relative-primes 10)		; => 189
 #+end_src
+* 1.34
+#+begin_src emacs-lisp
+(defun f (g) (funcall g 2))
+(defun square (x) (* x x))
+
+(f 'square)				; => 4
+(f (lambda (z) (* z (+ z 1))))		; => 6
+(f 'f)					; => 
+#+end_src
+
