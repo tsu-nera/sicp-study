@@ -813,9 +813,11 @@ n.  For example, `(k n)' computes 5n^2.
 #+end_src
 
 * 1.37
-** a
-   連分数についての問題.
+  連分数についての問題.
+  - [[http://ja.wikipedia.org/wiki/%E9%80%A3%E5%88%86%E6%95%B0][連分数 - Wikipedia]]
 
+** a
+   Iterative solution.
 #+begin_src emacs-lisp
 (defun cont-frac-iter (n d k)
   (letrec
@@ -832,6 +834,8 @@ n.  For example, `(k n)' computes 5n^2.
 #+end_src
 
 * b
+  Recursive solution.
+
 #+begin_src emacs-lisp
 (defun cont-frac-rec (n d k)
   (if (= k 0) 0
@@ -842,3 +846,39 @@ n.  For example, `(k n)' computes 5n^2.
                145)
 #+end_src
 
+* 1.38
+  これをネイピア数という. オイラー数, 自然対数の底.
+  - [[http://ja.wikipedia.org/wiki/%E3%83%8D%E3%82%A4%E3%83%94%E3%82%A2%E6%95%B0][ネイピア数 - Wikipedia]]
+  
+#+begin_src emacs-lisp
+(defun napier (k) 
+  (+ 2.0 (cont-frac (lambda (i) 1) 
+                    (lambda (i) 
+                      (if (= (% i 3) 2) 
+                          (/ (+ i 1) 1.5)
+                          1)) 
+                    k)))
+(napier 100)
+#+end_src
+
+* 1.39
+  tan (x) の 連分数展開.
+  
+#+begin_src emacs-lisp
+(defun cont-frac-rec (n d k)
+  (if (= k 0) 0
+      (/ (funcall n k) (+ (funcall d k) (cont-frac-rec n d (- k 1))))))
+
+(defun tan-cf (x k)
+  (letrec ((tan-cf-fact (lambda (k)
+                          (if (= k 1)
+                              x
+                              (- (* x x)))))
+           (tan-cf-add (lambda (k)
+                         (- (* k 2) 1))))
+    (cont-frac-rec tan-cf-fact
+                   tan-cf-add
+                   k)))
+
+(tan-cf 0.3 100)
+#+end_src
