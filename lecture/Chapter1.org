@@ -178,10 +178,10 @@
 	(t (+ (fib (- n 1))
 	      (fib (- n 2))))))
 
-(fib 4)					; => 3
-(fib 5)					; => 5
-(fib 6)					; => 8
-(fib 7)					; => 13
+(fib 4)					; => 
+(fib 5)					; => 
+(fib 6)					; => 
+(fib 7)					; => 
   #+end_src
 
     反復による fibonacci. 状態変数として a, b, count を導入している.
@@ -196,9 +196,9 @@
       b
     (fib-iter (+ a b) a (- count 1))))
 
-(fib 6)					; => 8
-(fib 7)					; => 13
-(fib 8)					; => 21
+(fib 6)					; => 
+(fib 7)					; => 
+(fib 8)					; => 
   #+end_src
 
 **** ex
@@ -263,7 +263,7 @@
 	((= kinds-of-coins 4) 25)
 	((= kinds-of-coins 5) 50)))
 
-(count-change 100)			; => 292
+(count-change 100)			; => 
 #+end_src
 
  Fermart のテスト
@@ -298,9 +298,9 @@
 (defun prime? (n)
   (= n (smallest-divisor n)))
 
-(prime? 199)				; => t
-(prime? 1999)				; => t
-(prime? 19999)				; => nil
+(prime? 199)				; => 
+(prime? 1999)				; => 
+(prime? 19999)				; => 
 #+end_src
 
 ** 1.3 高階手続きによる抽象
@@ -321,7 +321,7 @@
       (+ (funcall f a)
 	 (sum f (funcall next a) next b))))
 
-(sum-cubes 1 10)			; => 3025
+(sum-cubes 1 10)			; => 
 
 (defun integral (f a b dx)
   (defun add-dx (x)
@@ -329,7 +329,7 @@
   (* (sum f (+ a (/ dx 2.0)) 'add-dx b)
      dx))
 
-(integral 'cube 0 1 0.01)		; => 0.24998750000000042
+(integral 'cube 0 1 0.01)		; => 
 
 ;; 計算できない...
 ;; (integral 'cube 0 1 0.001)		; => error
@@ -363,19 +363,110 @@
 	   (search f a b))
 	  ((and (negative? b-value) (positive? a-value))
 	   (search f b a))
-	  (else
-	   (error "Values are not of opposite sign" a b)))))
+	  (t
+	   (error "Values are not of opposite sign" a b))))) 
 
-(half-interval-method 'sin 2.0 4.0)	; => 3.14111328125
+(half-interval-method 'sin 2.0 4.0)	; => 
 
 (half-interval-method
  (lambda (x)
-   (- (* x x x) (* 2 x) 3)) 1.0 2.0)	; => 1.89306640625
-		      
+   (- (* x x x) (* 2 x) 3)) 1.0 2.0)	; => 
 #+end_src
 
-* Chapter 2::        Building Abstractions with Data
-* Chapter 3::        Modularity, Objects, and State
-* Chapter 4::        Metalinguistic Abstraction
-* Chapter 5::        Computing with Register Machines
+** 1.3.4 Procedures as Returned Values
+   方程式系を数値計算によって解くための反復法による求根アルゴリズムの 1 つ.
+   - [[http://ja.wikipedia.org/wiki/%E3%83%8B%E3%83%A5%E3%83%BC%E3%83%88%E3%83%B3%E6%B3%95][ニュートン法 - Wikipedia]]
+
+   例えば, 2 次方程式を微分した式の近似解を, 反復によって求めることができる.
+   
+   これがなぜか動かない. とりあえず保留して先に.
+
+#+begin_src emacs-lisp
+;; -*- lexical-binding: t -*-
+(defconst sicp-tolerance 0.00001)
+
+(defun fixed-point (f first-guess)
+  (letrec
+      ((close-enough? (lambda (v1 v2)
+                        (< (abs (- v1 v2))
+                           sicp-tolerance)))
+       (try (lambda (guess)
+              (let ((next (funcall f guess)))
+                (if (funcall close-enough? next guess)
+                    next
+                    (funcall try next))))))
+    (funcall try first-guess)))
+
+(defun average (x y) (/ (+ x y) 2))
+(defun square (x) (* x x))
+
+(defun average-damp (f)
+  (lambda (x) (average x (funcall f x))))
+  
+(funcall (average-damp 'square) 10)     ; => 55
+
+(defun sqrt (x)
+  (fixed-point
+   (average-damp (lambda (y) (/ x y)))
+   1.0))
+(sqrt 3)                                ; => 1.7320508075688772
+
+(defun cube-root (x)
+  (fixed-point
+   (average-damp (lambda (y) (/ x (square y))))
+   1.0))
+(cube-root 3)                           ; => 1.4422517984541108
+
+(defconst dx 0.000001)
+
+(defun deriv (g)
+  (lambda (x)
+    (/ (- (funcall g (+ x dx)) (funcall g x))
+       dx)))
+
+(defun cube (x) (* x x x))
+
+(funcall (deriv 'cube) 5)               ; => 75.00001501625775
+
+(defun newton-transform (g)
+  (lambda (x)
+    (- x (/ (funcall g x) (funcall (deriv g) x)))))
+
+(defun newtons-method (g guess)
+  (fixed-point (newton-transform g) guess))
+
+(defun sqrt (x)
+  (newtons-method (lambda (y) (- (square y) x))
+   1.0))
+(sqrt 3)                                ; => 1.732050807568878
+
+(defun fixed-point-of-transform (g transform guess)
+  (fixed-point (funcall transform g) guess))
+
+(defun sqrt (x)
+  (fixed-point-of-transform (lambda (y) (/ x y))
+                            'average-damp
+                            1.0))
+(sqrt 3)                                ; => 1.7320508075688772
+
+(defun sqrt (x)
+  (fixed-point-of-transform (lambda (y) (- (square y) x))
+                            'newton-transform
+                            1.0))
+(sqrt 3)                                ; => 1.732050807568878
+#+end_src
+
+  われわれはプログラマとして, プログラムの根底にある抽象をみつけ,
+  より強力な抽象化ができるように努めてなければならない.
+
+  高階手続きの重要さは, それにより抽象をプログラム言語の要素して
+  確かに表せ, 他の計算要素として扱えるようになる点にある.
+   
+* chapter 2: Building Abstractions with Data
+  Lecture:
+  - https://www.youtube.com/watch?v=ymsbTVLbyN4&list=PL8FE88AA54363BC46&index=4
+
+* Chapter 3: Modularity, Objects, and State
+* Chapter 4: Metalinguistic Abstraction
+* Chapter 5: Computing with Register Machines
 
