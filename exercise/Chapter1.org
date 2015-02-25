@@ -886,35 +886,19 @@ n.  For example, `(k n)' computes 5n^2.
 * 1.40
   
 #+begin_src emacs-lisp
-(defconst sicp-dx 0.00001)
-
-(defun fixed-point (f first-guess)
-  (letrec
-      ((close-enough? (lambda (v1 v2)
-                        (< (abs (- v1 v2))
-                           sicp-dx)))
-       (try (lambda (guess)
-              (let ((next (funcall f guess)))
-                (if (funcall close-enough? next guess)
-                    next
-                    (funcall try next))))))
-    (funcall try first-guess)))
-
-(defun deriv (g)
-  (lambda (x) (/ (- (funcall g (+ x sicp-dx)) (funcall g x)) sicp-dx)))
-
-(defun newton-transformer (g)
-  (lambda (x) (- x (/ (funcall g x) (funcall (deriv g) x)))))
-
-(defun newton-method (g guess)
-  (fixed-point (newton-transformer g) guess))
-
 (defun cubic (a b c)
   (lambda (x) (+ (expt x 3) (* a (expt x 2)) (* b x) c)))
-
-(defun find-zero (a b c)
-  (newton-method (cubic a b c) 1.0))
-
-(find-zero 1 2 3)
 #+end_src
+
+* 1.41
+  
+#+begin_src emacs-lisp
+;; -*- lexical-binding: t -*-
+(defun double (f)
+  (lambda (x) (funcall f (funcall f x))))
+
+(funcall (double '1+) 0)                ; => 2
+(funcall (funcall (double (double 'double)) '1+) 5) ; => 21
+#+end_src
+
 
