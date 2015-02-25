@@ -901,4 +901,15 @@ n.  For example, `(k n)' computes 5n^2.
 (funcall (funcall (double (double 'double)) '1+) 5) ; => 21
 #+end_src
 
+* 1.42
+  合成関数
 
+#+begin_src emacs-lisp
+;; -*- lexical-binding: t -*-
+(defun square (x) (* x x))
+
+(defun compose (f g)
+  (lambda (x) (funcall f (funcall g x))))
+
+(funcall (compose 'square '1+) 6)             ; => 49
+#+end_src
