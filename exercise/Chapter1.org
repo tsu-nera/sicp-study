@@ -933,3 +933,24 @@ n.  For example, `(k n)' computes 5n^2.
 (funcall (repeated 'square 2) 5)                 ; => 625
 #+end_src
 
+* 1.44
+   平準化.
+
+#+begin_src emacs-lisp
+;; -*- lexical-binding: t -*-
+(defconst dx 0.00001)
+(defun smooth (f)
+  (lambda (x) (/ (+ (funcall f x)
+                    (funcall f (+ x dx))
+                    (funcall f (- x dx)))
+                 3)))
+                    
+(defun square (x) (* x x))
+(funcall (smooth 'square) 2)            ; => 4.000000000066667
+
+(defun n-smooth (f n)
+  (funcall (repeated 'smooth n) f))
+
+(funcall (n-smooth 'square 3) 2)            ; => 4.0000000002
+#+end_src
+
