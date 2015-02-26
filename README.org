@@ -35,5 +35,6 @@ SICP 学習用リポジトリです.
       + [[http://kinokoru.jp/archives/628][SICP 第 2 章に関するまとめ | きのこる庭]]
     - [[http://natu.txt-nifty.com/natsutan/2007/09/sicp_by_a6a2.html][「計算機プログラムの構造と解釈 (SICP) 」を読み終えて by なつたん: なつたん]]
     - [[http://coder.lv9.org/rinks/sicp.html][SICP - 残業プログラマのためのスキルアップリンク集]]
+    - [[http://d.hatena.ne.jp/higepon/20061027/1161960363][「計算機プログラムの構造と解釈 (SICP) 」を読み終えて - Higepon's blog]]
     - wiki: [[http://sicpreading.bitbucket.org/build/html/index.html][HELLO SICP WORLD - sicp-reading 0.0.1 documentation]]
     - sicp を読む会 https://github.com/sicp-reading
