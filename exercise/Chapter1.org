@@ -954,3 +954,6 @@ n.  For example, `(k n)' computes 5n^2.
 (funcall (n-smooth 'square 3) 2)            ; => 4.0000000002
 #+end_src
 
+* 1.45, 46
+  skipped :)
+
