@@ -1,0 +1,57 @@
+#+title: 第 2 章 データによる抽象の構築
+
+- [[http://community.schemewiki.org/?sicp-solutions][sicp-solutions]]
+- https://github.com/bixuanzju/sicp-exercises-elisp
+
+* 2.1
+
+#+begin_src emacs-lisp
+(defun make-rat (n d)
+  (if (< d 0)
+      (if (< n 0)
+          (cons n (* -1 d))
+          (cons (* -1 n) (* -1 d)))
+      (cons n d)))
+
+(defun numer (x)
+  (car x))
+(defun denum (x)
+  (cdr x))
+
+(make-rat 1 2)
+(make-rat -1 2)
+(make-rat -2 -2)
+(make-rat 1 -2)
+
+(defun print-rat (x)
+  (newline)
+  (princ (numer x))
+  (princ "/")
+  (princ (denum x)))
+#+end_src
+
+* 2.2
+
+#+begin_src emacs-lisp
+(defun make-point (x y)
+  (cons x y))
+(defun x-point (x)
+  (car x))
+(defun y-point (x)
+  (cdr x))
+
+(defun make-segment (x1 x2)
+  (cons x1 x2))
+(defun start-segment (x)
+  (car x))
+(defun end-segment (x)
+  (cdr x))
+
+(defun midpoint-segment (x y)
+  (make-segment
+   ((/ 2 (x-point (start-segment x)) (x-point (start-segment y))))
+   ((/ 2 (y-point (start-segment x)) (y-point (start-segment y))))))
+#+end_src
+  
+* 2.3
+  

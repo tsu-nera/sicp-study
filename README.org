@@ -6,6 +6,7 @@ SICP 学習用リポジトリです.
   日本語訳, 英語訳ともにオンラインで読める.
   - [[http://d.hatena.ne.jp/minghai/20140402/p1][非公式 PDF 版 SICP の全訳を公開しました - minghai の日記]]
   - [[http://mitpress.mit.edu/sicp/][Welcome to the SICP Web Site]]
+  - http://sicp.iijlab.net/fulltext/xcont.html
 
   自分の場合, 本は図書館で借りた.
   訳は, 自分の印象ではややピアソンの公式日本語訳のほうがいい気がした.
@@ -38,3 +39,4 @@ SICP 学習用リポジトリです.
     - [[http://d.hatena.ne.jp/higepon/20061027/1161960363][「計算機プログラムの構造と解釈 (SICP) 」を読み終えて - Higepon's blog]]
     - wiki: [[http://sicpreading.bitbucket.org/build/html/index.html][HELLO SICP WORLD - sicp-reading 0.0.1 documentation]]
     - sicp を読む会 https://github.com/sicp-reading
+    - [[http://www-inst.eecs.berkeley.edu/~cs61a/sp12/book/index.html][CS61A, Spring 2012 Online Textbook]] Python 版の SICP

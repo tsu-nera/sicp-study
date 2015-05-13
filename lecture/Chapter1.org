@@ -462,11 +462,4 @@
   高階手続きの重要さは, それにより抽象をプログラム言語の要素して
   確かに表せ, 他の計算要素として扱えるようになる点にある.
    
-* chapter 2: Building Abstractions with Data
-  Lecture:
-  - https://www.youtube.com/watch?v=ymsbTVLbyN4&list=PL8FE88AA54363BC46&index=4
-
-* Chapter 3: Modularity, Objects, and State
-* Chapter 4: Metalinguistic Abstraction
-* Chapter 5: Computing with Register Machines
 

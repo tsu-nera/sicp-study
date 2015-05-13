@@ -1,0 +1,47 @@
+* chapter 2: Building Abstractions with Data
+  Lecture:
+  - https://www.youtube.com/watch?v=ymsbTVLbyN4&list=PL8FE88AA54363BC46&index=4
+
+  データ抽象 data-abstraction
+
+  データオブジェクトをどう表現するかに関するプログラムの部分を、
+  データオブジェクトをどう使うかに関するプログラムから隔離する方法.
+
+* 2.1 データ抽象入門
+** 対
+   cons という手続きで構成される基本構造.
+  
+#+begin_src emacs-lisp
+(defun x () (cons 1 2))
+  
+(car (funcall 'x))
+(cdr (funcall 'x))
+#+end_src
+
+  対はあらゆるデータ構造を作り出す. 対で構成されたデータを *リスト構造*
+  のデータという.
+  
+** 有理数の表現  
+
+#+begin_src emacs-lisp
+(defun make-rat (n d)
+  (cons n d))
+    
+(defun numer (x)
+  (car x))
+(defun denum (x)
+  (cdr x))
+
+(defun print-rat (x)
+  (newline)
+  (princ (numer x))
+  (princ "/")
+  (princ (denum x)))
+
+(defun one-half ()
+    (make-rat 1 2))
+
+(print-rat (funcall 'one-half))
+#+end_src
+
+
