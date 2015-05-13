@@ -31,7 +31,6 @@
 #+end_src
 
 * 2.2
-
 #+begin_src emacs-lisp
 (defun make-point (x y)
   (cons x y))
@@ -52,6 +51,20 @@
    ((/ 2 (x-point (start-segment x)) (x-point (start-segment y))))
    ((/ 2 (y-point (start-segment x)) (y-point (start-segment y))))))
 #+end_src
-  
+
 * 2.3
+  
+#+begin_src emacs-lisp
+(defun double (x) (* x x))
+
+(defun get-length (rect)
+  "ここでアルキメデスの定理で長さをもとめるのだけど、省略")
+
+(defun make-rect (seg1 seg2)
+  (cons seg1 seg2))
+(defun row-length (x)
+  (car x))
+(defun col-segment (x)
+  (cdr x))
+#+end_src
   
