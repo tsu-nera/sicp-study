@@ -6,7 +6,15 @@
 
   データオブジェクトをどう表現するかに関するプログラムの部分を、
   データオブジェクトをどう使うかに関するプログラムから隔離する方法.
+  
+  - Representation: 
+    constructor, selector
 
+  constructor, selector によって、どう使うかに関するプログラムの
+  抽象の壁を構築し、抽象レイヤを構築する.
+
+  これを、Data Abstruction(データ抽象) という.
+ 
 * 2.1 データ抽象入門
 ** 対
    cons という手続きで構成される基本構造.
@@ -45,3 +53,5 @@
 #+end_src
 
 
+** 抽象の壁(Abstract Barrier)
+   
