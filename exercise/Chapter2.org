@@ -79,5 +79,31 @@
 x
 #+end_src
 
+* 2.5
+  ダメだ、わかんね。
 
+#+begin_src emacs-lisp
+;; (a, b) <=> 2^a * 3^b
+;; <=>
+(* (beki 2 a) (beki 3 b))
+;; <=>
+
+(defun beki (n a)
+  (defun beki-acc (k a acc)
+    (cond ((eq k 0) acc)
+          (t (beki-acc (- k 1) a (* acc a)))))
+  (beki-acc n a 1))
+
+(defun my-cons (a b) (* (beki 2 a) (beki 3 b)))
+#+end_src
   
+* 2.6
+  ダメだ、わかんね。
+
+
+#+begin_src emacs-lisp
+(defun one
+    (+ add-1 zero))
+#+end_src
+
+  Skip!!! (=ﾟωﾟ)ﾉ
