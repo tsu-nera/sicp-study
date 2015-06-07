@@ -2,7 +2,9 @@
 
 - [[http://community.schemewiki.org/?sicp-solutions][sicp-solutions]]
 - https://github.com/bixuanzju/sicp-exercises-elisp
-
+- [[http://www-antenna.ee.titech.ac.jp/~hira/hobby/symbolic/lisp/build-in.html][EmacsLisp 組み込み関数一覧]]
+- [[http://kinokoru.jp/archives/577][SICP 第 2 章 Exercise 難易度リスト ( 2.1 ～ 2.89 ) | きのこる庭]]
+  
 * 2.1
 
 #+begin_src emacs-lisp
@@ -107,3 +109,692 @@ x
 #+end_src
 
   Skip!!! (=ﾟωﾟ)ﾉ
+
+* 2.7
+
+#+begin_src emacs-lisp
+(defun add-interval (x y)
+  (make-interval (+ (lower-bound x) (lower-bound y))
+                 (+ (upper-bound x) (upper-bound y))))
+
+(defun mul-interval (x y)
+  (let ((p1 (* (lower-bound x) (lower-bound y)))
+        (p2 (* (lower-bound x) (upper-bound y)))
+        (p3 (* (upper-bound x) (lower-bound y)))
+        (p4 (* (upper-bound x) (upper-bound y))))
+    (make-interval (min p1 p2 p3 p4)
+                   (max p1 p2 p3 p4))))
+
+(defun div-interval (x y)
+  (mul-interval x
+                (make-interval (/ 1.0 (upper-bound y))
+                               (/ 1.0 (lower-bound y)))))
+
+(defun make-interval (a b) (cons a b))
+(defun lower-bound (x) (min (car x) (cdr x)))
+(defun upper-bound (x) (max (car x) (cdr x)))
+#+end_src
+
+* 2.8
+  ダメだ、わかんね。
+
+#+begin_src emacs-lisp
+#+end_src
+
+* 2.9
+  ダメだ、全然わかんね.
+
+#+begin_src emacs-lisp
+(defun width (x)
+  (/ (- (upper-bound x) (lower-bound x)) 2))
+#+end_src
+
+* 2.10...
+  この章は skip することにした
+
+* 2.17
+  
+#+begin_src emacs-lisp
+  (defun last-pair (items)
+    (if (eq nil (cdr items))
+        (list (car items))
+        (last-pair (cdr items))))
+  (last-pair (list 23 72 149 34))
+#+end_src
+
+* 2.18
+
+#+begin_src emacs-lisp
+  (defun my-reverse (items)
+    (if (eq nil (cdr items))
+        items
+        (append (my-reverse (cdr items))
+                (list (car items)))))
+
+  (my-reverse (list 1 4 9 16 25))
+#+end_src
+
+* 2.19
+  skip.. ^^;
+
+* 2.20
+  . は &rest で置き換える.
+  
+#+begin_src emacs-lisp
+(defun even? (a)
+  (= (mod a 2) 0))
+(defun odd? (a)
+  (/= (mod a 2) 0))
+
+(defun same-parity-trans (l p)
+  (cond
+   ((null l) nil)
+   ;; 以後 p によって分岐
+   ((funcall p (car l)) (cons (car l) (same-parity-trans (cdr l) p)))
+   (t (same-parity-trans (cdr l) p))))
+
+(defun same-parity (a &rest lst)
+    ;; ここで、はじめの数字の偶奇判定
+    (if (even? a)
+        (cons a (same-parity-trans lst 'even?))
+        (cons a (same-parity-trans lst 'odd?))))
+
+(same-parity 1 2 3 4 5 6 7)
+(same-parity 2 3 4 5 6 7)
+#+end_src
+
+* 2.21
+
+#+begin_src emacs-lisp
+  (defun square (x) (* x x))
+
+  (defun square-list (items)
+    (if (null items)
+        nil
+        (cons (square (car items)) (square-list (cdr items)))))
+
+  (defun square-list (items)
+    (map 'square items))
+   
+  (square-list (list 1 2 3 4))
+#+end_src
+
+* 2.22
+  skip :)
+
+* 2.23
+
+#+begin_src emacs-lisp
+(defun for-each (proc items)
+  (if (null items)
+      nil
+      ((funcall proc (car items))
+       (for-each proc (cdr items)))))
+#+end_src
+
+* 2.24
+  skip :)
+
+* 2.25
+  skip :)
+
+* 2.26
+  
+#+begin_src emacs-lisp
+(setq x (list 1 2 3))
+(setq y (list 4 5 6))
+
+(append x y)
+(cons x y)
+(list x y)
+#+end_src
+
+* 2.27
+  
+#+begin_src emacs-lisp
+(defun my-reverse (items)
+  (if (null(cdr items))
+      items
+      (append (my-reverse (cdr items))
+              (list (car items)))))
+
+(defun deep-reverse (tree)
+  (cond
+   ((null tree) tree)
+   ((atom (car tree)) (append (deep-reverse (cdr tree)) (list (car tree))))
+   (t (append (deep-reverse (cdr tree))
+              (list (deep-reverse (car tree)))))))
+
+(my-reverse (list 1 4 9 16 25))
+(my-reverse (list (list 1 2) (list 3 4)))
+(deep-reverse (list (list 1 2) (list 3 4)))
+#+end_sorc
+
+* 2.28
+ 
+#+begin_src emacs-lisp
+(defun count-leaves (x)
+  (cond
+   ((null x) 0)
+   ((atom x) 1)
+   (t (+ (count-leaves (car x))
+         (count-leaves (cdr x))))))
+
+(count-leaves (list (list 1 2) (list 3 4)))
+
+(defun fringe (tree)
+  (cond
+   ((null tree) nil)
+   ((atom (car tree)) (cons (car tree) (fringe (cdr tree))))
+   (t (append (fringe (car tree))
+              (fringe (cdr tree))))))
+
+(fringe (list (list 1 2) (list 3 4)))
+#+end_src
+
+* 2.29
+** a
+
+#+begin_src emacs-lisp
+(defun left-branch (mobile) (car mobile))
+(defun right-branch (mobile) (cdr mobile))
+
+(defun branch-length (branch) (car branch))
+(defun branch-structure (branch) (cdr branch))
+#+end_src
+
+** b
+
+#+begin_src emacs-lisp
+    (defun total-weight (mobile)
+      (let* (left (left-branch mobile))
+        (right (right-branch mobile))
+        (ls (branch-structure left))
+        (rs (branch-structure right))
+        (cond
+         ((and (atom ls) (atom rs)) (+ ls rs))
+         ((atom ls) (+ ls (total-weight rs)))
+         ((atom rs) (+ (total-weight ls) rs))
+         (+ (total-weight ls) (total-weight rs)))))
+#+end_src
+
+** c 
+
+* 2.30
+
+#+begin_src emacs-lisp
+  (defun square-list (items)
+    (if (null items)
+        nil
+        (cons (square (car items)) (square-list (cdr items)))))
+
+  (defun square-list (items)
+    (map 'square items))
+
+  (defun square-tree (tree)
+    (cond
+     ((null tree) nil)
+     ((atom (car tree)) (cons (* (car tree) (car tree))))
+     (t (cons (square-tree (car tree))
+              (square-tree (cdr tree))))))
+
+  ;; lambda のなかに if 文も入れることができる
+                            
+  (defun square-tree2 (tree)
+    (map (lambda (sub-tree)
+           (if (atom sub-tree)
+               (* sub-tree sub-tree)
+               (square-tree2 sub-tree)))
+         tree))
+#+end_src
+
+* 2.31
+
+#+begin_src emacs-lisp
+(square (x) (* x x))
+
+(defun tree-map (tree factor)
+  (map (lambda (sub-tree)
+         (if (atom sub-tree)
+             (fun-call factor sub-tree)
+             (square-tree3 sub-tree factor)))
+       tree))
+#+end_src
+
+* 2.32
+
+#+begin_src emacs-lisp
+(defun accumulate (op initial sequence)
+  (if (null sequence)
+      initial
+      (funcall op (car sequence)
+               (accumulate op initial (cdr sequence)))))
+#+end_src
+
+* 2.33 x 
+
+** 1st
+#+begin_src emacs-lisp
+(defun map (p sequence)
+  (accumulate (lambda (x y) (cons (funcall p x) y)) nil sequence))
+
+(mapcar (lambda (x) (+ x 1)) (list 1 2 3 4))
+(map (lambda (x) (+ x 1)) (list 1 2 3 4))
+#+end_src
+
+#+begin_src emacs-lisp
+(defun append (seq1 seq2)
+    (accumulate 'cons seq2 seq1))
+
+(append (list 1 2) (list 3 4))
+#+end_src
+
+#+begin_src emacs-lisp
+(defun length (sequence)
+;;  (accumulate (lambda (_ x) (1+ x)) 0 sequence))
+  (accumulate (lambda (x y) (+ y 1)) 0 sequence))
+
+(length (list 1 2 3))
+#+end_src
+
+** 2nd
+
+#+begin_src emacs-lisp
+(defun map (p seq)
+  (accumulate (lambda (x y) (cons (funcall p x) y))
+              nil
+              seq))
+
+(mapcar (lambda (x) (+ x 1)) (list 1 2 3 4))
+(map (lambda (x) (+ x 1)) (list 1 2 3 4))
+
+(defun append (s1 s2)
+  (accumulate 'cons s1 s2))
+(append (list 1 2) (list 3 4))
+
+(defun length (seq)
+  (accumulate (lambda (x y) (+ 1 y)) 0 seq))
+
+(length (list 1 2))
+#+end_src
+
+* 2.34 x
+  <2015-06-04 木> x
+
+#+begin_src emacs-lisp
+(defun horner-eval (x coefficient-sequence)
+  (accumulate (lambda (this-coeff higher-terms)
+                (+ (* higher-terms x) this-coeff))
+  0
+  coefficient-sequence))
+
+(horner-eval 2 (list 1 3 0 5 0 1))
+#+end_src
+
+** 2nd
+
+#+begin_src emacs-lisp
+(defun horner-eval (x coefficient-sequence)
+  (accumulate (lambda (this-coeff higher-terms)
+                (+ (* x higher-terms) this-coeff))
+              0
+              coefficient-sequence))
+(horner-eval 2 (list 1 3 0 5 0 1))
+#+end_src
+
+* 2.35
+
+#+begin_src emacs-lisp
+(setq x (cons (list 1 2) (list 3 4)))
+
+(defun count-leaves (x)
+  (accumulate '+
+              0
+              (map (lambda (x) (if (atom x) 1
+                                   (count-leaves x)))
+                   x)))
+
+(count-leaves x)                        ; => 4
+#+end_src
+
+* 2.36
+
+#+begin_src emacs-lisp
+
+#+end_src
+
+* 2.37
+  うーん、elisp ではうごかないな... パス
+
+#+begin_src emacs-lisp
+(setq m (list (list 1 2 3 4) (list 4 5 6 6) (list 6 7 8 9)))
+
+(defun map2 (op &rest ls)
+  (if (null (car ls))
+      nil
+      (cons (apply op (map 'car ls))
+            (apply 'map2 op (map 'cdr ls)))))
+
+(defun dot-product (v w)
+  (accumulate '+ 0 (map2 '* v w)))
+(dot-product m)
+#+end_src
+
+* 2.38
+  pass
+
+* 2.39
+
+* 2.40
+#+begin_src emacs-lisp
+(defun enumerate-interval (low high)
+  (if (> low high)
+      nil
+      (cons low (enumerate-interval (+ low 1) high))))
+
+(defun accumulate (op initial sequence)
+  (if (null sequence)
+      initial
+      (funcall op (car sequence)
+               (accumulate op initial (cdr sequence)))))
+
+(defun flatmap (proc seq)
+  (accumulate 'append nil (mapcar proc seq)))
+
+(defun unique-pairs (n)
+  (flatmap
+   (lambda (i)
+     (mapcar (lambda (j) (list i j))
+          (enumerate-interval 1 (- i 1))))
+   (enumerate-interval 1 n)))
+
+(unique-pairs 3)
+(unique-pairs 6)
+
+(defun prime-sum-pairs (n)
+  (map make-pair-sum
+       (filter prime-sum? (unique-pairs n)))
+#+end_src
+  
+* 2.41
+  分からん.. 
+
+#+begin_src emacs-lisp
+(defun seq-pairs (n)
+  (flatmap
+   (lambda (i)
+     (mapcar (lambda (j) (list i j))
+             (enumerate-interval 1 i)))
+   (enumerate-interval 1 n)))
+
+(seq-pairs 3)
+
+(defun list-sum (list)
+  (accumulate '+ 0 list))
+(defun list-sum-equal? (list s)
+  (= (list-sum list) s))
+
+(list-sum-equal? (list 1 2) 3)
+(list-sum-equal? (list 1 2 3) 3)
+
+(defun filter (predicate sequence)
+  (cond ((null sequence) nil)
+        ((funcall predicate (car sequence))
+         (cons (car sequence)
+               (filter predicate (cdr sequence))))
+        (t (filter predicate  (cdr sequence)))))
+
+(defun ordered-triples-sum (n s)
+  (filter (lambda (list) (= (accumulate '+ 0 list) s))
+          (flatmap
+           (lambda (i)
+             (flatmap (lambda (j)
+                        (mapcar (lambda (k) (list i j k))
+                                (enumerate-interval 1 (- j 1))))
+                      (enumerate-interval 1 (- i 1))))
+           (enumerate-interval 1 n))))
+
+(ordered-triples-sum 3 6)
+#+end_src
+
+* 2.42, 43
+  pass ... 見るからに難しい.
+
+  図軽言語の章は計算できないのでパス.
+
+* 2.56
+  
+#+begin_src emacs-lisp
+(defun deriv (exp var)
+  (cond
+   ((numberp exp)
+    0)
+   ((variable? exp)
+    (if (same-variable? exp var) 1 0))
+   ((sum? exp)
+    (make-sum (deriv (addend exp) var)
+              (deriv (augend exp) var)))
+   ((product? exp)
+    (make-sum
+     (make-product (multiplier exp)
+                   (deriv (multiplicand exp) var))))
+   ;; ここから追加
+   ((exponentiation? exp)
+    (make-product
+     (make-product (exponent exp)
+                   (make-exponentiation (base exp)
+                                        (- (exponent exp) 1)))
+     (deriv (base exp) var)))
+   ;; ここまで
+   (t (error "unknown expression type: DERIV"))))
+
+;; リストかつ 先頭が '** 
+(defun exponentiation? (exp) (and (listp exp) (eq (car exp) '**)))
+
+(defun base (exp) (cadr exp))
+(defun exponent (exp) (caddr exp))
+
+(defun make-exponentiation (base exp)
+  (cond
+   ((=exp 1) base)
+   ((=exp 0) 1)
+   (t (list '** base exp))))
+#+end_src
+
+* 2.58
+  pass...
+
+* 2.59
+  
+#+begin_src emacs-lisp
+;; 要素が集合に含まれるか
+(defun element-of-set? (x set)
+  (cond ((null set) nil)
+        ((equal? x (car set)) t)
+        (t (element-of-set? x (cdr set)))))
+
+;; 集合に要素を追加する
+(defun adjoin-set (x set)
+  (if (element-of-set? set)
+      set
+      (cons x set)))
+
+;; 積集合
+(defun intersection-set (set1 set2)
+  (cond ((or (null set1) (null set2)) nil)
+        ((element-of-set? (car set1) set2)
+         (cons (car set1)
+               (intersection-set (cdr set1) set2)))
+        (t (intersection-set (cdr set1) set2))))
+
+;; 和集合
+(defun union-set (set1 set2)
+  (cond ((null set1) set2)
+        ((null set2) set1)
+        ((element-of-set? (car set1) set2)
+         (union-set (cdr set1) set2))
+        (t (cons (car set1) (union-set (cdr set1) set2)))))
+#+end_src
+
+* 2.60
+  pass..
+
+* 2.61
+
+#+begin_src emacs-lisp
+(defun adjoin-set (x set)
+  (cond
+   ((null set) (list x))
+   ((= x (car set)) set)
+   ((< x (car set)) (cons x set))
+   (t (cons (car set) (adjoin-set x (cdr set))))))
+#+end_src
+
+* 2.62
+
+#+begin_src emacs-lisp
+(defun union-set (s1 s2)
+  (let ((x1 (car s1))
+        (x2 (car s2)))
+    (cond
+     ((null s1) s2)
+     ((null s2) s1)
+     ((< x1 x2)
+      (cons x1 (union-set (cdr s1) s2)))
+     ((< x2 x1)
+      (cons x2 (union-set s1 (cdr s2))))
+     ;; x1 == x2
+     (t (cons x1 (union-set (cdr s1) (cdr s2)))))))
+#+end_src
+
+* 2.65
+  わかんない..
+
+* 2.66
+
+#+begin_src emacs-lisp
+(defun lookup (given-key set-of-records)
+  (cond ((null set-of-records) nil)
+        ((= given-key (key (entry set-of-records)))
+         (entry set-of-records))
+        ((< given-key (key (entry set-of-records)))
+         (lookup given-key (left-branch set-of-records)))
+        (t (lookup given-key (right-branch set-of-records)))))
+#+end_src
+
+* 2.67
+
+#+begin_src emacs-lisp
+(defun make-leaf (symbol weight) (list 'leaf symbol weight))
+
+(defun leaf? (object) (eq (car object) 'leaf))
+
+(defun symbol-leaf (x) (cadr x))
+
+(defun weight-leaf (x) (caddr x))
+
+(defun make-code-tree (left right)
+  (list left
+        right
+        (append (symbols left) (symbols right))
+        (+ (weight left) (weight right))))
+
+(defun left-branch (tree) (car tree))
+
+(defun right-branch (tree) (cadr tree))
+
+(defun symbols (tree)
+  (if (leaf? tree)
+      (list (symbol-leaf tree))
+    (caddr tree)))
+
+(defun weight (tree)
+  (if (leaf? tree)
+      (weight-leaf tree)
+      (cadddr tree)))
+
+(defun decode (bits tree)
+  (letrec
+      ((decode-1 (lambda (bits current-branch)
+                   (if (null bits)
+                       nil
+                       (let ((next-branch
+                              (choose-branch (car bits) current-branch)))
+                         (if (leaf? next-branch)
+                             (cons (symbol-leaf next-branch)
+                                   (funcall decode-1 (cdr bits) tree))
+                             (funcall decode-1 (cdr bits) next-branch)))))))
+    (funcall decode-1 bits tree)))
+
+(defun choose-branch (bit branch)
+  (cond
+   ((= bit 1) (right-branch branch))
+   ((= bit 0) (left-branch branch))
+   (t (error "bad bit"))))
+
+(defun adjoin-set (x set)
+  (cond
+   ((null set) (list x))
+   ((< (weight x) (weight (car set))) (cons x set))
+   (t (cons (car set) (adjoin-set x (cdr set))))))
+
+(defun make-leaf-set (pairs)
+  (if (null pairs)
+      nil
+      (let ((pair (car pairs)))
+        (adjoin-set (make-leaf (car pair)   ; symbol
+                               (cadr pair)) ; frequency
+                    (make-leaf-set (cdr pairs))))))
+
+(setq sample-tree
+      (make-code-tree (make-leaf 'A 4)
+                      (make-code-tree
+                       (make-leaf 'B 2)
+                       (make-code-tree
+                        (make-leaf 'D 1)
+                        (make-leaf 'C 1)))))
+(setq sample-message '(0 1 1 0 0 1 0 1 0 1 1 1 0))
+
+(decode sample-message sample-tree)     ; => 
+#+end_src
+
+* 2.68
+
+#+begin_src emacs-lisp
+(defun encode (message tree)
+  (if (null message)
+      nil
+    (append (encode-symbol (car message) tree)
+            (encode (cdr message) tree))))
+
+(defun encode-symbol (sym tree)
+  (if (memq sym (symbols tree))
+      (if (leaf? tree)
+          nil
+        (let* ((left-branch (left-branch tree))
+               (left-symbols (symbols left-branch))
+               (right-branch (right-branch tree))
+               (right-symbols (symbols right-branch)))
+          (cond
+           ((memq sym left-symbols)
+            (cons 0 (encode-symbol sym left-branch)))
+           ((memq sym right-symbols)
+            (cons 1 (encode-symbol sym right-branch))))))
+      (error "Symbol not in the tree")))
+
+(encode (list 'A 'D 'A 'B 'B 'C 'A) sample-tree) ; => 
+#+end_src
+
+* 2.69
+  わからん
+  
+#+begin_src emacs-lisp
+(defun generate-huffman-tree (pairs)
+  (successive-merge (make-leaf-set pairs)))
+
+(defun successive-merge (set)
+  (if (= 1 (length set))
+      (car set)
+    (let ((new-node (make-code-tree (car set) (cadr set))))
+      (successive-merge (adjoin-set new-node (cddr set))))))
+#+end_src
