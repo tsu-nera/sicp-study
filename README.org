@@ -8,13 +8,12 @@ SICP 学習用リポジトリです.
   - [[http://mitpress.mit.edu/sicp/][Welcome to the SICP Web Site]]
   - http://sicp.iijlab.net/fulltext/xcont.html
 
-  自分の場合, 本は図書館で借りた.
-  訳は, 自分の印象ではややピアソンの公式日本語訳のほうがいい気がした.
-
 * 開発環境
  言語は Scheme.  Emacs での開発環境を構築.
  - [[http://qiita.com/da1/items/02f7d2f157c7145d58f2][Scheme - SICP を読むためにやっておくと便利かもしれないこと - Qiita]]  
  - [[http://d.hatena.ne.jp/tequilasunset/20110220/p4][SICP 読むための設定とか - Clipboard]]
+ - [[http://uents.hatenablog.com/entry/sicp/010-prog-env.md][SICP 読書ノート#10 - Racket/Emacs によるプログラミング環境構築 - @uents blog]]
+ - [[http://cl.naist.jp/index.php?SICP%CA%D9%B6%AF%B2%F1][SICP - NAIST Computational Linguistics]]
 
 * Bookmarks
 ** MIT courseware: Structure and Interpretation of Computer Programs
@@ -29,7 +28,12 @@ SICP 学習用リポジトリです.
    - asnwer: http://community.schemewiki.org/?SICP-Solutions
    - elisp:  https://github.com/bixuanzju/sicp-exercises-elisp
 
+** text
+   - http://sicp.iijlab.net/fulltext/xcont.html
+
 ** Useful
+
+
     - [[http://devblog.me/sicp.html][SICP and Me]]
     - [[http://kinokoru.jp/archives/794][『計算機プログラムの構造と解釈』 (SICP) を読み終えて | きのこる庭]]
       + [[http://kinokoru.jp/archives/572][SICP 第 1 章に関するまとめ | きのこる庭]]
@@ -40,3 +44,4 @@ SICP 学習用リポジトリです.
     - wiki: [[http://sicpreading.bitbucket.org/build/html/index.html][HELLO SICP WORLD - sicp-reading 0.0.1 documentation]]
     - sicp を読む会 https://github.com/sicp-reading
     - [[http://www-inst.eecs.berkeley.edu/~cs61a/sp12/book/index.html][CS61A, Spring 2012 Online Textbook]] Python 版の SICP
+    - [[http://uents.hatenablog.com/entry/sicp/index][SICP 読書ノート - 目次 - @uents blog]]
