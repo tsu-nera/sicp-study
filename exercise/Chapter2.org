@@ -473,9 +473,8 @@ x
 #+end_src
 
 * 2.36
-  うーん、elisp ではうごかないな...
-
-#+begin_src emacs-lisp
+  #+begin_src emacs-lisp
+;;;   うーん、elisp ではうごかないな...
 (defun accumulate-n (op init seqs)
   (if (null (car seqs))
       nil
@@ -486,8 +485,27 @@ x
 (accumulate-n '+ 0 s)
 #+end_src
 
+#+begin_src scheme
+(define (accumulate op initial sequence) 
+  (if (null? sequence) 
+      initial 
+      (op (car sequence) 
+          (accumulate op initial (cdr sequence))))) 
+
+;; accumulate-n 
+(define (accumulate-n op init sequence) 
+  (define nil '()) 
+  (if (null? (car sequence)) 
+      nil 
+      (cons (accumulate op init (map car sequence)) 
+            (accumulate-n op init (map cdr sequence))))) 
+
+ ;; Usage: 
+(define t (list (list 1 2 3) (list 40 50 60) (list 700 800 900))) 
+(accumulate-n + 0 t)
+#+end_src
+
 * 2.37
-  うーん、elisp ではうごかないな... パス
 
 #+begin_src emacs-lisp
 (setq m (list (list 1 2 3 4) (list 4 5 6 6) (list 6 7 8 9)))
@@ -501,6 +519,35 @@ x
 (defun dot-product (v w)
   (accumulate '+ 0 (map2 '* v w)))
 (dot-product m)
+#+end_src
+
+#+begin_src scheme
+(define m (list (list 1 2 3 4) (list 4 5 6 6) (list 6 7 8 9)))
+(define n (list (list 1 2 3) (list 4 5 6) (list 6 7 8) (list 9 10 11)))
+
+(define (dot-product v w)
+  (accumulate + 0 (map * v w)))
+
+(dot-product (list 1 2 3) (list 4 5 6))
+
+;; a 
+(define (matrix-*-vector m v)
+  (map (lambda (x) (dot-product x v)) m))
+
+(matrix-*-vector m (list 1 2 3 4))
+
+;; b
+(define (transpose mat)
+  (accumulate-n cons '() mat))
+
+(transpose m)
+
+;; c
+(define (matrix-*-matrix m n)
+  (let ((cols (transpose n)))
+    (map (lambda (x) (matrix-*-vector cols x)) m)))
+
+(matrix-*-matrix m n)
 #+end_src
 
 * 2.38
@@ -580,10 +627,24 @@ x
 (ordered-triples-sum 3 6)
 #+end_src
 
-* 2.42, 43
-  pass ... 見るからに難しい.
+* 2.42
 
-  図軽言語の章は計算できないのでパス.
+#+begin_src scheme
+(define (queens board-size) 
+  (define (queen-cols k) 
+    (if (= k 0) 
+        (list empty-board) 
+        (filter 
+         (lambda (positions) (safe? k positions)) 
+         (flatmap 
+          (lambda (rest-of-queens) 
+            (map (lambda (new-row) 
+                   (adjoin-position new-row k rest-of-queens)) 
+                 (enumerate-interval 1 board-size))) 
+          (queen-cols (- k 1)))))) 
+  (queen-cols board-size)) 
+#+end_src
+
 
 * 2.56
   
@@ -809,7 +870,6 @@ x
 #+end_src
 
 * 2.69
-  わからん
   
 #+begin_src emacs-lisp
 (defun generate-huffman-tree (pairs)
@@ -821,3 +881,104 @@ x
     (let ((new-node (make-code-tree (car set) (cadr set))))
       (successive-merge (adjoin-set new-node (cddr set))))))
 #+end_src
+
+* 2.73
+
+#+begin_src scheme
+;; http://uents.hatenabloog.com/entry/sicp/020-ch2.4.3.1.md
+(define *op-table* (make-hash))
+
+(define (put op type item)
+  (if (not (hash-has-key? *op-table* op))
+      (hash-set! *op-table* op (make-hash))
+      true)
+  (hash-set! (hash-ref *op-table* op) type item))
+
+(define (get op type)
+  (define (not-found . msg)
+    (display msg (current-error-port))
+    (display "\n")
+    false)
+  (if (hash-has-key? *op-table* op)
+      (if (hash-has-key? (hash-ref *op-table* op) type)
+          (hash-ref (hash-ref *op-table* op) type)
+          (not-found "Bad key -- TYPE" type))
+      (not-found "Bad key -- OPERATION" op)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(define (deriv exp var)
+   (cond ((number? exp) 0)
+         ((variable? exp) (if (same-variable? exp var) 1 0))
+         (else ((get 'deriv (operator exp)) (operands exp) var))))
+
+(define (operator exp) (car exp))
+(define (operands exp) (cdr exp))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(define (install-sum-package)
+  ;; 内部手続き
+  (define (make-sum a1 a2) (cons a1 a2))
+  (define (addend exp) (cadr exp))
+  (define (augend exp) (caddr exp))
+  (define (deriv-sum exp)
+    (make-sum (deriv (addend exp))
+              (deriv (augend exp))))
+  
+  ;; システムの他の部分とのインタフェース
+  (define (tag x) (attatch-tag '+ x))
+  (put 'deriv '(+) deriv-sum)
+  (put 'make-sum '+
+       (lambda (x y) (tag (make-sum x y))))
+  'done)
+
+(define (make-sum x y)
+  ((get 'make-sum '+) x y))
+
+(define (install-product-package) 
+  ;; 内部手続き
+  
+(define (make-product m1 m2) (cons m1 m2)) 
+  (define (multiplier p) (cadr p)) 
+  (define (multiplicand p) (caddr p)) 
+  (define (deriv-product p) 
+    (make-sum 
+     (make-product (multiplier exp) 
+                   (deriv (multiplicand exp) var)) 
+     (make-product (deriv (multiplier exp) var) 
+                   (multiplicand exp)))) 
+  
+  ;; システムの他の部分とのインタフェース
+  (define (tag x) (attach-tag '* x)) 
+  (put 'deriv '(*) deriv-product) 
+  (put 'make-product '* 
+       (lambda (x y) (tag (make-product x y)))) 
+  'done) 
+
+(define (make-product x y) 
+  ((get 'make-product '*) x y)) 
+
+(define (deriv x) (apply-generic 'deriv x)) 
+#+end_src
+
+|       | +         | *             |
+|-------+-----------+---------------|
+| deriv | deriv-sum | deriv-product |
+|-------+-----------+---------------|
+
+* 2.74
+
+* 2.75
+
+#+begin_src emacs-lisp
+(define (make-from-mag-ang r a)
+  (define (dispatch op)
+    (cond ((eq? op 'real-part) (* r (cos a)))
+          ((eq? op 'imag-part) (* r (sin a)))
+          ((eq? op 'mag-part) r)
+          ((eq? op 'ang-part) a)
+          (else (error "Unknown op"))))
+  dispatch)
+#+end_src
+
